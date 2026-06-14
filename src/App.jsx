@@ -1,281 +1,434 @@
+import { useState, useEffect, useRef } from 'react';
+import {
+  IconMapPin,
+  IconBrandReact,
+  IconBrandPython,
+  IconCoffee,
+  IconBrandGit,
+  IconUsers,
+  IconTerminal2,
+  IconBrandGithub,
+  IconBrandLinkedin,
+  IconMail,
+  IconDownload,
+  IconArrowRight,
+  IconSun,
+  IconMoon,
+} from '@tabler/icons-react';
+import { useTheme } from './context/ThemeContext';
+import { useTilt } from './hooks/useTilt';
+
+// === DATA ===
 const navItems = [
-    { label: 'About', id: 'about' },
-    { label: 'Projects', id: 'projects' },
-    { label: 'Skills', id: 'skills' },
-    { label: 'Experience', id: 'experience' },
-    { label: 'Contact', id: 'contact' },
+  { label: 'Home', id: 'home' },
+  { label: 'About', id: 'about' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Contact', id: 'contact' },
 ];
 
-const projects = [
-    {
-        tag: 'Web App',
-        title: 'StudyBuddy',
-        description:
-            'A campus study planner that centralizes assignment tracking, collaboration notes, and progress metrics in one polished experience.',
-        meta: ['React', 'Firebase', 'Responsive'],
-    },
-    {
-        tag: 'Automation',
-        title: 'Course Scraper',
-        description:
-            'An automated pipeline that collects course details from university portals and turns them into actionable study schedules.',
-        meta: ['Python', 'BeautifulSoup', 'Data'],
-    },
-    {
-        tag: 'Systems',
-        title: 'Memory Visualizer',
-        description:
-            'A learning tool for visualizing memory allocation, process states, and scheduling behaviors in C and systems programming.',
-        meta: ['C', 'Algorithms', 'Systems'],
-    },
+const stats = [
+  { value: '3+', label: 'Projects' },
+  { value: '2+', label: 'Years Coding' },
+  { value: '2028', label: 'Graduation' },
+  { value: 'GMU', label: 'Class of 2028' },
 ];
 
 const skills = [
-    {
-        title: 'Languages',
-        items: ['JavaScript / TypeScript', 'Python', 'Java', 'C / C++'],
-    },
-    {
-        title: 'Frameworks',
-        items: ['React', 'Node.js', 'Express', 'Flask'],
-    },
-    {
-        title: 'Tools',
-        items: ['Git', 'GitHub', 'Figma', 'PostgreSQL'],
-    },
-    {
-        title: 'CS Fundamentals',
-        items: ['Algorithms', 'Data Structures', 'OS', 'Databases'],
-    },
+  { name: 'React', level: 'Advanced', progress: 85, Icon: IconBrandReact },
+  { name: 'Python', level: 'Advanced', progress: 80, Icon: IconBrandPython },
+  { name: 'Java', level: 'Intermediate', progress: 65, Icon: IconCoffee },
+  { name: 'Git', level: 'Advanced', progress: 90, Icon: IconBrandGit },
 ];
 
-const experience = [
-    {
-        title: 'Software Engineering Projects',
-        description:
-            'Built full-stack applications with modern tooling, version control, and team collaboration practices.',
-    },
-    {
-        title: 'CS Coursework',
-        description:
-            'Applied course knowledge from algorithms, operating systems, networking, and database design to real projects.',
-    },
-    {
-        title: 'Team Collaboration',
-        description:
-            'Worked closely with teammates on peer reviews, design discussions, and sprint-based development tasks.',
-    },
+const projects = [
+  {
+    tag: 'Full Stack',
+    title: 'StudyBuddy',
+    description: 'A collaborative study planner app built with React and Firebase for campus students.',
+    Icon: IconUsers,
+  },
+  {
+    tag: 'Automation',
+    title: 'Course Data Scraper',
+    description: 'Python automation script that extracts university course details and builds study schedules.',
+    Icon: IconTerminal2,
+  },
 ];
 
-function App() {
-    const handleNavClick = (event, id) => {
-        event.preventDefault();
-        const section = document.getElementById(id);
-        if (section) {
-            const offset = section.getBoundingClientRect().top + window.pageYOffset - 80;
-            window.scrollTo({ top: offset, behavior: 'smooth' });
-        }
-    };
-
-    return (
-        <>
-            <header className="topbar">
-                <div className="container topbar__inner">
-                    <a className="brand" href="#home" onClick={(event) => handleNavClick(event, 'home')}>
-                        <img
-                            className="brand__logo"
-                            src="https://stappprodmarmot.blob.core.windows.net/institution-logos/institution_131_20250914021318.jpeg"
-                            alt="George Mason University logo"
-                        />
-                        <span>Quan Huynh</span>
-                    </a>
-                    <nav className="nav" aria-label="Primary navigation">
-                        {navItems.map((item) => (
-                            <a key={item.id} href={`#${item.id}`} onClick={(event) => handleNavClick(event, item.id)}>
-                                {item.label}
-                            </a>
-                        ))}
-                    </nav>
-                </div>
-            </header>
-
-            <main>
-                <section className="hero" id="home">
-                    <div className="container hero__row">
-                        <div className="hero__copy">
-                            <span className="hero__eyebrow">GMU CS Junior • Internship seeker</span>
-                            <h1>Software engineering for teams who value clarity, speed, and growth.</h1>
-                            <p className="hero__text">
-                                I build practical web apps, automated workflows, and systems tools using languages like Python,
-                                JavaScript, and C. My goal is to intern on a team where I can learn quickly and deliver high-quality
-                                software.
-                            </p>
-                            <div className="hero__actions">
-                                <a className="button button--primary" href="#contact" onClick={(event) => handleNavClick(event, 'contact')}>
-                                    Contact me
-                                </a>
-                                <a className="button button--secondary" href="#projects" onClick={(event) => handleNavClick(event, 'projects')}>
-                                    Explore projects
-                                </a>
-                            </div>
-                        </div>
-                        <div className="hero__panel">
-                            <div className="hero__brand-card">
-                                <img
-                                    className="hero__brand-logo"
-                                    src="https://stappprodmarmot.blob.core.windows.net/institution-logos/institution_131_20250914021318.jpeg"
-                                    alt="George Mason University logo"
-                                />
-                                <div>
-                                    <p className="hero__brand-label">George Mason University</p>
-                                    <h2>GMU Computer Science</h2>
-                                    <p>School pride and technical focus combined in one internship-ready portfolio.</p>
-                                </div>
-                            </div>
-                            <div className="hero__stats-card">
-                                <p className="stat__label">Available Summer 2026</p>
-                                <p className="stat__value">CS Junior</p>
-                            </div>
-                            <div className="hero__stats-card">
-                                <p className="stat__label">Projects</p>
-                                <p className="stat__value">3+ shipped</p>
-                            </div>
-                            <div className="hero__stats-card">
-                                <p className="stat__label">Strengths</p>
-                                <p className="stat__value">Communication & delivery</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="section" id="about">
-                    <div className="container section__block">
-                        <div className="section__intro">
-                            <p className="section__eyebrow">About me</p>
-                            <h2>Driven by strong fundamentals and practical projects.</h2>
-                            <p>
-                                I’m a rising Computer Science junior at George Mason University. I enjoy solving problems with clean
-                                code and building interfaces that feel intuitive. I’m especially interested in internships in software
-                                engineering, full-stack development, or tooling.
-                            </p>
-                        </div>
-                        <div className="feature-grid">
-                            <div className="feature-card">
-                                <h3>Fast learner</h3>
-                                <p>I absorb new tools and concepts quickly and apply them to real project work.</p>
-                            </div>
-                            <div className="feature-card">
-                                <h3>Practical focus</h3>
-                                <p>I deliver working solutions, from responsive web apps to automation scripts.</p>
-                            </div>
-                            <div className="feature-card">
-                                <h3>Team-ready</h3>
-                                <p>I communicate clearly, collaborate on design decisions, and support shared goals.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section className="section section--alt" id="projects">
-                    <div className="container section__block">
-                        <div className="section__intro">
-                            <p className="section__eyebrow">Projects</p>
-                            <h2>Selected work that shows engineering instincts.</h2>
-                        </div>
-                        <div className="project-grid">
-                            {projects.map((project) => (
-                                <article className="project-card" key={project.title}>
-                                    <div className="project-card__meta">
-                                        <span>{project.tag}</span>
-                                    </div>
-                                    <h3>{project.title}</h3>
-                                    <p>{project.description}</p>
-                                    <div className="project-tags">
-                                        {project.meta.map((tag) => (
-                                            <span key={tag} className="tag">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                <section className="section" id="skills">
-                    <div className="container section__block">
-                        <div className="section__intro">
-                            <p className="section__eyebrow">Skills</p>
-                            <h2>Tools and languages I use every day.</h2>
-                        </div>
-                        <div className="skills-grid">
-                            {skills.map((skill) => (
-                                <div className="skill-card" key={skill.title}>
-                                    <h3>{skill.title}</h3>
-                                    <ul>
-                                        {skill.items.map((item) => (
-                                            <li key={item}>{item}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                <section className="section section--alt" id="experience">
-                    <div className="container section__block">
-                        <div className="section__intro">
-                            <p className="section__eyebrow">Experience</p>
-                            <h2>Coursework and project experience that matters.</h2>
-                        </div>
-                        <div className="experience-grid">
-                            {experience.map((item) => (
-                                <div className="experience-card" key={item.title}>
-                                    <h3>{item.title}</h3>
-                                    <p>{item.description}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                <section className="section" id="contact">
-                    <div className="container section__block contact-block">
-                        <div>
-                            <p className="section__eyebrow">Contact</p>
-                            <h2>Ready to contribute on your next internship team.</h2>
-                            <p>
-                                If you’re looking for a motivated CS intern from George Mason University, I’d love to discuss how I can
-                                help your team.
-                            </p>
-                        </div>
-                        <div className="contact-card">
-                            <div>
-                                <p className="contact-label">University</p>
-                                <p>George Mason University</p>
-                            </div>
-                            <div>
-                                <p className="contact-label">Major</p>
-                                <p>Computer Science</p>
-                            </div>
-                            <div>
-                                <p className="contact-label">Availability</p>
-                                <p>Summer 2026</p>
-                            </div>
-                            <a
-                                className="button button--primary button--wide"
-                                href="mailto:quan@example.com?subject=Internship%20Opportunity"
-                            >
-                                Email me
-                            </a>
-                        </div>
-                    </div>
-                </section>
-            </main>
-        </>
+// === HOOKS ===
+function useScrollAnimation() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.1 }
     );
+    document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 }
 
-export default App;
+function useSkillBars() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('animate'), 300);
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    document.querySelectorAll('.skill-card').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+// === NAVBAR ===
+function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const { isDark, toggle } = useTheme();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollTo = (e, id) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+  };
+
+  return (
+    <header className={`topbar${scrolled ? ' topbar--scrolled' : ''}`}>
+      <div className="container topbar__inner">
+        <a className="brand" href="#home">
+          QH<span className="brand-dot">.</span>
+        </a>
+        <nav className="nav">
+          {navItems.map((item) => (
+            <a key={item.id} href={`#${item.id}`} onClick={(e) => scrollTo(e, item.id)}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        <div className="topbar__right">
+          <div className="theme-toggle-wrap">
+            <span className="mode-label">{isDark ? 'DARK' : 'LIGHT'}</span>
+            <button className="toggle-btn" onClick={toggle} aria-label="Toggle dark mode">
+              <div className="toggle-knob">
+                {isDark ? <IconMoon size={13} /> : <IconSun size={13} />}
+              </div>
+            </button>
+          </div>
+          <a className="btn btn--cv" href="/cv.pdf" download>
+            <IconDownload size={15} />
+            Download CV
+          </a>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// === HERO ===
+function Hero() {
+  const boxRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!boxRef.current) return;
+    const rect = boxRef.current.getBoundingClientRect();
+    const dx = (e.clientX - rect.left - rect.width / 2) / rect.width;
+    const dy = (e.clientY - rect.top - rect.height / 2) / rect.height;
+    boxRef.current.style.transform = `perspective(1000px) rotateY(${-15 + dx * 18}deg) rotateX(${5 - dy * 14}deg) translateZ(50px)`;
+  };
+
+  const handleMouseLeave = () => {
+    if (!boxRef.current) return;
+    boxRef.current.style.transform = 'perspective(1000px) rotateY(-15deg) rotateX(5deg) translateZ(50px)';
+  };
+
+  const scrollTo = (e, id) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+  };
+
+  return (
+    <section className="hero" id="home" data-tilt-zone>
+      <div className="container">
+        <div className="hero__row animate-on-scroll">
+          {/* Left column */}
+          <div className="hero__left">
+            <div className="hero__location">
+              <IconMapPin size={14} />
+              George Mason University · Fairfax, VA
+            </div>
+            <h1 className="hero__title">
+              <span className="light">Hi, I'm</span>
+              <span className="name-first">Quan</span>
+              <span className="name-last">Huynh</span>
+            </h1>
+            <p className="hero__sub">
+              A rising CS junior who loves building things for the web. Passionate about clean code,
+              great UX, and solving real problems.
+            </p>
+            <div className="hero__cta">
+              <a href="#projects" className="btn btn--primary" onClick={(e) => scrollTo(e, 'projects')}>
+                View My Work
+              </a>
+              <a href="#contact" className="btn btn--outline" onClick={(e) => scrollTo(e, 'contact')}>
+                Say Hello
+              </a>
+            </div>
+          </div>
+
+          {/* Right column */}
+          <div className="hero__right">
+            <div className="hero__panel">
+              <div className="hero__badge hero__badge--tl">
+                <span className="badge-dot" />
+                CS Major
+              </div>
+
+              <div className="hero__photo-float">
+                <div
+                  ref={boxRef}
+                  className="hero__image-box"
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <img src="/assets/quan.png" alt="Quan Huynh" className="hero__image" />
+                </div>
+              </div>
+
+              <div className="hero__badge hero__badge--br">
+                <span className="badge-dot" />
+                Open to internships
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === STATS ===
+function Stats() {
+  const r0 = useTilt(6, 1.4);
+  const r1 = useTilt(6, 1.4);
+  const r2 = useTilt(6, 1.4);
+  const r3 = useTilt(6, 1.4);
+  const tiltRefs = [r0, r1, r2, r3];
+
+  return (
+    <section className="stats-section" data-tilt-zone>
+      <div className="container">
+        <div className="stats__inner animate-on-scroll">
+          {stats.map((s, i) => (
+            <div className="stat-card" key={i} ref={tiltRefs[i]}>
+              <p className="stat-value">{s.value}</p>
+              <p className="stat-label">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === GMU SECTION ===
+function GMUSection() {
+  return (
+    <section className="gmu-section" id="about">
+      <div className="gmu-ghost" aria-hidden="true">MASON</div>
+      <div className="container">
+        <div className="gmu-row">
+          {/* Left: stacked photo cards */}
+          <div className="animate-on-scroll">
+            <div className="gmu-stack">
+              <div className="gmu-card gmu-card--back">
+                <img src="/assets/school1.png" alt="" aria-hidden="true" />
+              </div>
+              <div className="gmu-card gmu-card--front">
+                <img src="/assets/schoologo.png" alt="George Mason University" />
+              </div>
+              <div className="gmu-info-badge">
+                <div className="gmu-info-badge__logo">GM</div>
+                <div className="gmu-info-badge__text">
+                  <strong>George Mason</strong>
+                  <span>Est. 1972 · Fairfax, VA</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: text content */}
+          <div className="animate-on-scroll">
+            <p className="gmu-eyebrow">WHERE I STUDY</p>
+            <div className="gmu-divider" />
+            <h2 className="gmu-heading">
+              George Mason<br />
+              <span className="green">University</span>
+            </h2>
+            <p className="gmu-desc">
+              Proudly studying Computer Science at GMU — one of the top CS programs in Virginia.
+              Rising junior graduating May 2028. Diving deep into algorithms, systems, and
+              software engineering.
+            </p>
+            <div className="gmu-pills">
+              {['Computer Science', 'Rising Junior', 'Class of 2028', 'Fairfax, VA'].map((p) => (
+                <span key={p} className="gmu-pill">{p}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === SKILLS ===
+function Skills() {
+  const s0 = useTilt(7, 1.3);
+  const s1 = useTilt(7, 1.3);
+  const s2 = useTilt(7, 1.3);
+  const s3 = useTilt(7, 1.3);
+  const tiltRefs = [s0, s1, s2, s3];
+
+  return (
+    <section className="skills-section" id="skills" data-tilt-zone>
+      <div className="container">
+        <div className="animate-on-scroll">
+          <p className="section-eyebrow">WHAT I KNOW</p>
+          <h2 className="section-title">My <span className="accent">skills</span></h2>
+        </div>
+        <div className="skills__grid">
+          {skills.map((skill, i) => (
+            <div
+              className="skill-card animate-on-scroll"
+              key={i}
+              ref={tiltRefs[i]}
+              style={{ '--progress': `${skill.progress}%` }}
+            >
+              <div className="skill-icon">
+                <skill.Icon size={24} />
+              </div>
+              <p className="skill-name">{skill.name}</p>
+              <p className="skill-level">{skill.level}</p>
+              <div className="skill-progress">
+                <div className="skill-bar" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === PROJECTS ===
+function Projects() {
+  const p0 = useTilt(8, 1.2);
+  const p1 = useTilt(8, 1.2);
+  const tiltRefs = [p0, p1];
+
+  return (
+    <section className="projects-section" id="projects" data-tilt-zone>
+      <div className="container">
+        <div className="animate-on-scroll">
+          <p className="section-eyebrow">WHAT I'VE BUILT</p>
+          <h2 className="section-title">My <span className="accent">projects</span></h2>
+        </div>
+        <div className="projects__grid">
+          {projects.map((project, i) => (
+            <div className="project-card animate-on-scroll" key={i} ref={tiltRefs[i]}>
+              <div className="project__preview">
+                <div className="project__preview-icon">
+                  <project.Icon size={28} />
+                </div>
+              </div>
+              <div className="project__body">
+                <span className="project__tag">{project.tag}</span>
+                <h3 className="project__title">{project.title}</h3>
+                <p className="project__desc">{project.description}</p>
+                <a href="#" className="project__link">
+                  View project <IconArrowRight size={15} />
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// === CTA BANNER ===
+function CTABanner() {
+  return (
+    <section className="cta-section" id="contact">
+      <div className="cta-card animate-on-scroll">
+        <div>
+          <h2 className="cta-heading">
+            Let's build something <span className="bright">great</span> together.
+          </h2>
+          <p className="cta-sub">Open to internships, collabs, and cool projects</p>
+        </div>
+        <a href="mailto:quanhuynh364@gmail.com" className="btn btn--primary btn--cta">
+          Get in touch
+        </a>
+      </div>
+    </section>
+  );
+}
+
+// === FOOTER ===
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="container footer__inner">
+        <p className="footer__copy">© 2025 Quan Huynh · Built with React + Vite</p>
+        <div className="footer__icons">
+          <a href="https://github.com/quanhuynh" target="_blank" rel="noreferrer" className="footer__icon" aria-label="GitHub">
+            <IconBrandGithub size={17} />
+          </a>
+          <a href="https://linkedin.com/in/quanhuynh" target="_blank" rel="noreferrer" className="footer__icon" aria-label="LinkedIn">
+            <IconBrandLinkedin size={17} />
+          </a>
+          <a href="mailto:quanhuynh364@gmail.com" className="footer__icon" aria-label="Email">
+            <IconMail size={17} />
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+// === APP ===
+export default function App() {
+  useScrollAnimation();
+  useSkillBars();
+
+  return (
+    <>
+      <div className="blob blob--tr" aria-hidden="true" />
+      <div className="blob blob--bl" aria-hidden="true" />
+      <Navbar />
+      <main>
+        <Hero />
+        <Stats />
+        <GMUSection />
+        <Skills />
+        <Projects />
+        <CTABanner />
+      </main>
+      <Footer />
+    </>
+  );
+}
