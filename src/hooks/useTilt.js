@@ -13,7 +13,10 @@ export function useTilt(maxTilt = 10, proximity = 1.2) {
       // Skip tilt on small screens
       if (window.innerWidth < 768) return;
       // Skip while scroll-in animation is still running
-      if (!el.classList.contains('visible') && el.classList.contains('animate-on-scroll')) return;
+      const animatingIn =
+        (el.classList.contains('animate-on-scroll') && !el.classList.contains('visible')) ||
+        (el.classList.contains('reveal') && !el.classList.contains('revealed'));
+      if (animatingIn) return;
 
       const zRect = zone.getBoundingClientRect
         ? zone.getBoundingClientRect()

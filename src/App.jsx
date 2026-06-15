@@ -14,9 +14,19 @@ import {
   IconArrowRight,
   IconSun,
   IconMoon,
+  IconExternalLink,
+  IconRocket,
+  IconSend,
+  IconCheck,
+  IconLoader2,
+  IconUser,
 } from '@tabler/icons-react';
 import { useTheme } from './context/ThemeContext';
 import { useTilt } from './hooks/useTilt';
+import { useTypewriter } from './hooks/useTypewriter';
+import { useCounter } from './hooks/useCounter';
+import { useScrollReveal } from './hooks/useScrollReveal';
+import ScrollProgress from './components/ScrollProgress';
 
 // === DATA ===
 const navItems = [
@@ -25,13 +35,6 @@ const navItems = [
   { label: 'Skills', id: 'skills' },
   { label: 'Projects', id: 'projects' },
   { label: 'Contact', id: 'contact' },
-];
-
-const stats = [
-  { value: '3+', label: 'Projects' },
-  { value: '2+', label: 'Years Coding' },
-  { value: '2028', label: 'Graduation' },
-  { value: 'GMU', label: 'Class of 2028' },
 ];
 
 const skills = [
@@ -45,25 +48,57 @@ const projects = [
   {
     tag: 'Full Stack',
     title: 'StudyBuddy',
-    description: 'A collaborative study planner app built with React and Firebase for campus students.',
+    description: 'A collaborative study planner built with React and Firebase for campus students.',
     Icon: IconUsers,
+    stack: ['React', 'Firebase', 'CSS'],
+    github: '#',
+    live: '#',
   },
   {
     tag: 'Automation',
     title: 'Course Data Scraper',
     description: 'Python automation script that extracts university course details and builds study schedules.',
     Icon: IconTerminal2,
+    stack: ['Python', 'BeautifulSoup', 'Pandas'],
+    github: '#',
+    live: null,
+  },
+  {
+    tag: 'Coming Soon',
+    title: 'More on the way...',
+    description: "Always building something new. My next project is in the works — stay tuned!",
+    Icon: IconRocket,
+    stack: ['???'],
+    github: null,
+    live: null,
+    comingSoon: true,
   },
 ];
+
+// === UTILITIES ===
+function mergeRefs(...refs) {
+  return (node) => {
+    refs.forEach((r) => {
+      if (!r) return;
+      if (typeof r === 'function') r(node);
+      else r.current = node;
+    });
+  };
+}
 
 // === HOOKS ===
 function useScrollAnimation() {
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          e.target.classList.add('revealed');
+        }
+      }),
       { threshold: 0.1 }
     );
-    document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+    document.querySelectorAll('.animate-on-scroll, .reveal').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 }
@@ -84,6 +119,15 @@ function useSkillBars() {
     document.querySelectorAll('.skill-card').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+}
+
+// === TYPING DOTS ===
+function TypingDots() {
+  return (
+    <span className="typing-dots" aria-hidden="true">
+      <span>.</span><span>.</span><span>.</span>
+    </span>
+  );
 }
 
 // === NAVBAR ===
@@ -135,16 +179,27 @@ function Navbar() {
   );
 }
 
-// === HERO ===
+// === HERO — typewriter + content reveal ===
 function Hero() {
   const boxRef = useRef(null);
+  const [contentVisible, setContentVisible] = useState(false);
+
+  // Typewriter chains: "Hi, I'm" → "Quan" → "Huynh"
+  const { displayed: hiText, done: hiDone } = useTypewriter("Hi, I'm", 60, 400);
+  const { displayed: firstText, done: firstDone } = useTypewriter('Quan', 75, hiDone ? 150 : 999999);
+  const { displayed: lastText } = useTypewriter('Huynh', 75, firstDone ? 150 : 999999);
+
+  // Reveal badge / sub / buttons when "Huynh" starts typing
+  useEffect(() => {
+    if (lastText.length > 0 && !contentVisible) setContentVisible(true);
+  }, [lastText.length]);
 
   const handleMouseMove = (e) => {
     if (!boxRef.current) return;
     const rect = boxRef.current.getBoundingClientRect();
     const dx = (e.clientX - rect.left - rect.width / 2) / rect.width;
     const dy = (e.clientY - rect.top - rect.height / 2) / rect.height;
-    boxRef.current.style.transform = `perspective(1000px) rotateY(${-15 + dx * 18}deg) rotateX(${5 - dy * 14}deg) translateZ(50px)`;
+    boxRef.current.style.transform = `perspective(1000px) rotateY(${-15 + dx * 21}deg) rotateX(${5 - dy * 16}deg) translateZ(50px)`;
   };
 
   const handleMouseLeave = () => {
@@ -161,23 +216,50 @@ function Hero() {
   return (
     <section className="hero" id="home" data-tilt-zone>
       <div className="container">
-        <div className="hero__row animate-on-scroll">
+        <div className="hero__row">
           {/* Left column */}
           <div className="hero__left">
-            <div className="hero__location">
+            <a
+              href="https://www.gmu.edu/"
+              target="_blank"
+              rel="noreferrer"
+              className={`hero__location hero-badge${contentVisible ? ' visible' : ''}`}
+            >
               <IconMapPin size={14} />
               George Mason University · Fairfax, VA
-            </div>
+            </a>
+
             <h1 className="hero__title">
-              <span className="light">Hi, I'm</span>
-              <span className="name-first">Quan</span>
-              <span className="name-last">Huynh</span>
+              <span className="light">
+                {hiText}
+                {!hiDone && <TypingDots />}
+                <span className={`cursor${hiDone ? ' hidden' : ''}`}>|</span>
+              </span>
+              <span className="name-first">
+                {firstText}
+                {hiDone && (
+                  <>
+                    {!firstDone && <TypingDots />}
+                    <span className={`cursor${firstDone ? ' hidden' : ''}`}>|</span>
+                  </>
+                )}
+              </span>
+              <span className="name-last">
+                {lastText}
+                {firstDone && (
+                  <>
+                    <TypingDots />
+                    <span className="cursor blink">|</span>
+                  </>
+                )}
+              </span>
             </h1>
-            <p className="hero__sub">
+
+            <p className={`hero__sub hero-desc${contentVisible ? ' visible' : ''}`}>
               A rising CS junior who loves building things for the web. Passionate about clean code,
               great UX, and solving real problems.
             </p>
-            <div className="hero__cta">
+            <div className={`hero__cta hero-btns${contentVisible ? ' visible' : ''}`}>
               <a href="#projects" className="btn btn--primary" onClick={(e) => scrollTo(e, 'projects')}>
                 View My Work
               </a>
@@ -188,13 +270,12 @@ function Hero() {
           </div>
 
           {/* Right column */}
-          <div className="hero__right">
+          <div className="hero__right animate-on-scroll">
             <div className="hero__panel">
               <div className="hero__badge hero__badge--tl">
                 <span className="badge-dot" />
                 CS Major
               </div>
-
               <div className="hero__photo-float">
                 <div
                   ref={boxRef}
@@ -205,7 +286,6 @@ function Hero() {
                   <img src="/assets/quan.png" alt="Quan Huynh" className="hero__image" />
                 </div>
               </div>
-
               <div className="hero__badge hero__badge--br">
                 <span className="badge-dot" />
                 Open to internships
@@ -218,39 +298,58 @@ function Hero() {
   );
 }
 
-// === STATS ===
+// === STATS — number counter + tilt ===
 function Stats() {
   const r0 = useTilt(6, 1.4);
   const r1 = useTilt(6, 1.4);
   const r2 = useTilt(6, 1.4);
   const r3 = useTilt(6, 1.4);
-  const tiltRefs = [r0, r1, r2, r3];
+
+  const { count: projects, ref: cr0 } = useCounter(3, 1200);
+  const { count: years, ref: cr1 } = useCounter(2, 1000);
+  const { count: grad, ref: cr2 } = useCounter(2028, 1800);
 
   return (
     <section className="stats-section" data-tilt-zone>
       <div className="container">
         <div className="stats__inner animate-on-scroll">
-          {stats.map((s, i) => (
-            <div className="stat-card" key={i} ref={tiltRefs[i]}>
-              <p className="stat-value">{s.value}</p>
-              <p className="stat-label">{s.label}</p>
-            </div>
-          ))}
+          <div className="stat-card" ref={mergeRefs(r0, cr0)}>
+            <p className="stat-value">{projects}+</p>
+            <p className="stat-label">Projects</p>
+          </div>
+          <div className="stat-card" ref={mergeRefs(r1, cr1)}>
+            <p className="stat-value">{years}+</p>
+            <p className="stat-label">Years Coding</p>
+          </div>
+          <div className="stat-card" ref={mergeRefs(r2, cr2)}>
+            <p className="stat-value">{grad}</p>
+            <p className="stat-label">Graduation</p>
+          </div>
+          <div className="stat-card" ref={r3}>
+            <p className="stat-value">GMU</p>
+            <p className="stat-label">Class of 2028</p>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// === GMU SECTION ===
+// === GMU SECTION — staggered reveal ===
 function GMUSection() {
+  const stackRef = useScrollReveal();
+  const eyebrowRef = useScrollReveal();
+  const headingRef = useScrollReveal();
+  const descRef = useScrollReveal();
+  const pillsRef = useScrollReveal();
+
   return (
     <section className="gmu-section" id="about">
       <div className="gmu-ghost" aria-hidden="true">MASON</div>
       <div className="container">
         <div className="gmu-row">
           {/* Left: stacked photo cards */}
-          <div className="animate-on-scroll">
+          <div ref={stackRef} className="reveal">
             <div className="gmu-stack">
               <div className="gmu-card gmu-card--back">
                 <img src="/assets/school1.png" alt="" aria-hidden="true" />
@@ -269,19 +368,19 @@ function GMUSection() {
           </div>
 
           {/* Right: text content */}
-          <div className="animate-on-scroll">
-            <p className="gmu-eyebrow">WHERE I STUDY</p>
-            <div className="gmu-divider" />
-            <h2 className="gmu-heading">
+          <div>
+            <p ref={eyebrowRef} className="gmu-eyebrow reveal">WHERE I STUDY</p>
+            <div className="gmu-divider reveal delay-1" ref={useScrollReveal()} />
+            <h2 ref={headingRef} className="gmu-heading reveal delay-2">
               George Mason<br />
               <span className="green">University</span>
             </h2>
-            <p className="gmu-desc">
+            <p ref={descRef} className="gmu-desc reveal delay-3">
               Proudly studying Computer Science at GMU — one of the top CS programs in Virginia.
               Rising junior graduating May 2028. Diving deep into algorithms, systems, and
               software engineering.
             </p>
-            <div className="gmu-pills">
+            <div ref={pillsRef} className="gmu-pills reveal delay-4">
               {['Computer Science', 'Rising Junior', 'Class of 2028', 'Fairfax, VA'].map((p) => (
                 <span key={p} className="gmu-pill">{p}</span>
               ))}
@@ -293,13 +392,14 @@ function GMUSection() {
   );
 }
 
-// === SKILLS ===
+// === SKILLS — tilt + stagger ===
 function Skills() {
   const s0 = useTilt(7, 1.3);
   const s1 = useTilt(7, 1.3);
   const s2 = useTilt(7, 1.3);
   const s3 = useTilt(7, 1.3);
   const tiltRefs = [s0, s1, s2, s3];
+  const delayClasses = ['delay-1', 'delay-2', 'delay-3', 'delay-4'];
 
   return (
     <section className="skills-section" id="skills" data-tilt-zone>
@@ -311,7 +411,7 @@ function Skills() {
         <div className="skills__grid">
           {skills.map((skill, i) => (
             <div
-              className="skill-card animate-on-scroll"
+              className={`skill-card animate-on-scroll ${delayClasses[i]}`}
               key={i}
               ref={tiltRefs[i]}
               style={{ '--progress': `${skill.progress}%` }}
@@ -332,36 +432,79 @@ function Skills() {
   );
 }
 
-// === PROJECTS ===
-function Projects() {
-  const p0 = useTilt(8, 1.2);
-  const p1 = useTilt(8, 1.2);
-  const tiltRefs = [p0, p1];
+// === FLIP CARD component ===
+function FlipCard({ project }) {
+  const [flipped, setFlipped] = useState(false);
+  const isComingSoon = Boolean(project.comingSoon);
+
+  const handleClick = () => {
+    if (isComingSoon) return;
+    if (window.innerWidth < 768) setFlipped((f) => !f);
+  };
 
   return (
-    <section className="projects-section" id="projects" data-tilt-zone>
+    <div
+      className={`flip-card reveal${flipped ? ' flipped' : ''}${isComingSoon ? ' coming-soon-card' : ''}`}
+      onClick={handleClick}
+    >
+      <div className="flip-inner">
+        {/* FRONT */}
+        <div className="flip-front">
+          <div className="project__preview">
+            <div className="project__preview-icon">
+              <project.Icon size={28} />
+            </div>
+          </div>
+          <div className="project__body">
+            <span className="project__tag">{project.tag}</span>
+            <h3 className="project__title">{project.title}</h3>
+            <p className="project__desc">{project.description}</p>
+            {!isComingSoon && <p className="proj-hint">Hover to see stack →</p>}
+          </div>
+        </div>
+
+        {/* BACK */}
+        {!isComingSoon && (
+          <div className="flip-back">
+            <div className="flip-back-title">Tech Stack</div>
+            <div className="flip-stack-list">
+              {project.stack.map((s) => (
+                <span key={s} className="stack-badge">{s}</span>
+              ))}
+            </div>
+            <div className="flip-links">
+              {project.github && (
+                <a href={project.github} className="flip-btn-github" onClick={(e) => e.stopPropagation()}>
+                  <IconBrandGithub size={13} /> GitHub
+                </a>
+              )}
+              {project.live && (
+                <a href={project.live} className="flip-btn-live" onClick={(e) => e.stopPropagation()}>
+                  <IconExternalLink size={13} /> Live Demo
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// === PROJECTS — flip cards ===
+function Projects() {
+  const titleRef = useScrollReveal();
+
+  return (
+    <section className="projects-section" id="projects">
       <div className="container">
-        <div className="animate-on-scroll">
+        <div ref={titleRef} className="reveal">
           <p className="section-eyebrow">WHAT I'VE BUILT</p>
           <h2 className="section-title">My <span className="accent">projects</span></h2>
         </div>
         <div className="projects__grid">
           {projects.map((project, i) => (
-            <div className="project-card animate-on-scroll" key={i} ref={tiltRefs[i]}>
-              <div className="project__preview">
-                <div className="project__preview-icon">
-                  <project.Icon size={28} />
-                </div>
-              </div>
-              <div className="project__body">
-                <span className="project__tag">{project.tag}</span>
-                <h3 className="project__title">{project.title}</h3>
-                <p className="project__desc">{project.description}</p>
-                <a href="#" className="project__link">
-                  View project <IconArrowRight size={15} />
-                </a>
-              </div>
-            </div>
+            <FlipCard key={i} project={project} />
           ))}
         </div>
       </div>
@@ -369,32 +512,153 @@ function Projects() {
   );
 }
 
-// === CTA BANNER ===
-function CTABanner() {
+// === CTA + CONTACT — flip card on "Get in touch" ===
+function CTAContact() {
+  const [flipped, setFlipped] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle');
+  const wrapRef = useRef(null);
+  const frontRef = useRef(null);
+  const backRef = useRef(null);
+  const textRevealRef = useScrollReveal();
+
+  // Sync outer height to whichever face is active
+  useEffect(() => {
+    if (!wrapRef.current) return;
+    const target = flipped ? backRef.current : frontRef.current;
+    if (target) wrapRef.current.style.height = target.scrollHeight + 'px';
+  }, [flipped]);
+
+  // Set initial height on mount
+  useEffect(() => {
+    if (wrapRef.current && frontRef.current) {
+      wrapRef.current.style.height = frontRef.current.scrollHeight + 'px';
+    }
+  }, []);
+
+  const handleBack = () => {
+    setFlipped(false);
+    // Reset form after flip-back animation completes
+    setTimeout(() => {
+      setStatus('idle');
+      setForm({ name: '', email: '', message: '' });
+    }, 700);
+  };
+
+  const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    await new Promise((r) => setTimeout(r, 1800));
+    setStatus('success');
+  };
+
   return (
     <section className="cta-section" id="contact">
-      <div className="cta-card animate-on-scroll">
-        <div>
-          <h2 className="cta-heading">
-            Let's build something <span className="bright">great</span> together.
-          </h2>
-          <p className="cta-sub">Open to internships, collabs, and cool projects</p>
+      <div ref={wrapRef} className="cta-flip-wrap">
+        <div className={`cta-flip-scene${flipped ? ' flipped' : ''}`}>
+
+          {/* FRONT — original CTA banner */}
+          <div ref={frontRef} className="cta-flip-front">
+            <div className="cta-card">
+              <div ref={textRevealRef} className="reveal">
+                <h2 className="cta-heading">
+                  Let&apos;s build something <span className="bright">great</span> together.
+                </h2>
+                <p className="cta-sub">Open to internships, collabs, and cool projects</p>
+              </div>
+              <button className="btn btn--primary btn--cta" onClick={() => setFlipped(true)}>
+                Get in touch
+              </button>
+            </div>
+          </div>
+
+          {/* BACK — animated contact form */}
+          <div ref={backRef} className="cta-flip-back">
+            <div className="contact-grid-overlay" aria-hidden="true" />
+            <div className="contact-blob contact-blob--1" aria-hidden="true" />
+            <div className="contact-blob contact-blob--2" aria-hidden="true" />
+            <button className="contact-back-btn" onClick={handleBack}>← Back</button>
+            <div className="contact-inner">
+              {/* Left */}
+              <div className="contact-left">
+                <span className="contact-connect-badge">Let&apos;s connect</span>
+                <h2 className="contact-heading">
+                  Let&apos;s build something{' '}
+                  <span className="accent">great</span> together.
+                </h2>
+                <ul className="contact-perks">
+                  <li><span className="perk-icon"><IconCheck size={14} /></span>Available for internships</li>
+                  <li><span className="perk-icon"><IconCheck size={14} /></span>Open to cool collabs</li>
+                  <li><span className="perk-icon"><IconCheck size={14} /></span>Quick to respond</li>
+                  <li><span className="perk-icon"><IconCheck size={14} /></span>Always building something</li>
+                </ul>
+              </div>
+
+              {/* Right — form */}
+              <div className="contact-right">
+                <form className="contact-form" onSubmit={handleSubmit} noValidate>
+                  <div className={`form-field${form.name ? ' has-value' : ''}`}>
+                    <input
+                      id="cf-name" name="name" type="text"
+                      value={form.name} onChange={handleChange}
+                      required autoComplete="off" disabled={status !== 'idle'}
+                    />
+                    <label htmlFor="cf-name">Your Name</label>
+                    <span className="field-icon"><IconUser size={15} /></span>
+                  </div>
+                  <div className={`form-field${form.email ? ' has-value' : ''}`}>
+                    <input
+                      id="cf-email" name="email" type="email"
+                      value={form.email} onChange={handleChange}
+                      required autoComplete="off" disabled={status !== 'idle'}
+                    />
+                    <label htmlFor="cf-email">Email Address</label>
+                    <span className="field-icon"><IconMail size={15} /></span>
+                  </div>
+                  <div className={`form-field form-field--textarea${form.message ? ' has-value' : ''}`}>
+                    <textarea
+                      id="cf-message" name="message" rows={5}
+                      value={form.message} onChange={handleChange}
+                      required disabled={status !== 'idle'}
+                    />
+                    <label htmlFor="cf-message">Your Message</label>
+                  </div>
+                  <button
+                    type="submit"
+                    className={`contact-submit${status !== 'idle' ? ` contact-submit--${status}` : ''}`}
+                    disabled={status !== 'idle'}
+                  >
+                    <span className="contact-submit-inner">
+                      {status === 'idle' && <><IconSend size={15} /> Send Message</>}
+                      {status === 'loading' && <><IconLoader2 size={15} className="spin-icon" /> Sending...</>}
+                      {status === 'success' && <><IconCheck size={15} /> Message Sent!</>}
+                    </span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <a href="mailto:quanhuynh364@gmail.com" className="btn btn--primary btn--cta">
-          Get in touch
-        </a>
       </div>
     </section>
   );
 }
 
-// === FOOTER ===
+// === FOOTER — staggered reveal ===
 function Footer() {
+  const leftRef = useScrollReveal();
+  const rightRef = useScrollReveal();
+
   return (
     <footer className="footer">
       <div className="container footer__inner">
-        <p className="footer__copy">© 2025 Quan Huynh · Built with React + Vite</p>
-        <div className="footer__icons">
+        <p ref={leftRef} className="footer__copy reveal">
+          © 2025 Quan Huynh · Built with React + Vite
+        </p>
+        <div ref={rightRef} className="footer__icons reveal delay-2">
           <a href="https://github.com/quanhuynh" target="_blank" rel="noreferrer" className="footer__icon" aria-label="GitHub">
             <IconBrandGithub size={17} />
           </a>
@@ -417,6 +681,7 @@ export default function App() {
 
   return (
     <>
+      <ScrollProgress />
       <div className="blob blob--tr" aria-hidden="true" />
       <div className="blob blob--bl" aria-hidden="true" />
       <Navbar />
@@ -426,7 +691,7 @@ export default function App() {
         <GMUSection />
         <Skills />
         <Projects />
-        <CTABanner />
+        <CTAContact />
       </main>
       <Footer />
     </>
