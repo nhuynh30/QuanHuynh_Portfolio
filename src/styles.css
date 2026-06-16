@@ -1543,6 +1543,10 @@ img {
   background: #15803d;
   animation: success-pop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.4);
 }
+.contact-submit--error {
+  background: #dc2626;
+  cursor: pointer;
+}
 
 @keyframes success-pop {
   0% {

@@ -20,12 +20,14 @@ import {
   IconCheck,
   IconLoader2,
   IconUser,
+  IconAlertCircle,
 } from '@tabler/icons-react';
 import { useTheme } from './context/ThemeContext';
 import { useTilt } from './hooks/useTilt';
 import { useTypewriter } from './hooks/useTypewriter';
 import { useCounter } from './hooks/useCounter';
 import { useScrollReveal } from './hooks/useScrollReveal';
+import { useMagnetic } from './hooks/useMagnetic';
 import ScrollProgress from './components/ScrollProgress';
 
 // === DATA ===
@@ -38,10 +40,10 @@ const navItems = [
 ];
 
 const skills = [
-  { name: 'React', level: 'Advanced', progress: 85, Icon: IconBrandReact },
+  { name: 'React', level: 'Intermediate', progress: 70, Icon: IconBrandReact },
   { name: 'Python', level: 'Advanced', progress: 80, Icon: IconBrandPython },
-  { name: 'Java', level: 'Intermediate', progress: 65, Icon: IconCoffee },
-  { name: 'Git', level: 'Advanced', progress: 90, Icon: IconBrandGit },
+  { name: 'Java', level: 'Advanced', progress: 80, Icon: IconCoffee },
+  { name: 'Git', level: 'Intermediate', progress: 80, Icon: IconBrandGit },
 ];
 
 const projects = [
@@ -194,6 +196,9 @@ function Hero() {
     if (lastText.length > 0 && !contentVisible) setContentVisible(true);
   }, [lastText.length]);
 
+  const magPrimary = useMagnetic(0.3);
+  const magOutline = useMagnetic(0.3);
+
   const handleMouseMove = (e) => {
     if (!boxRef.current) return;
     const rect = boxRef.current.getBoundingClientRect();
@@ -260,10 +265,10 @@ function Hero() {
               great UX, and solving real problems.
             </p>
             <div className={`hero__cta hero-btns${contentVisible ? ' visible' : ''}`}>
-              <a href="#projects" className="btn btn--primary" onClick={(e) => scrollTo(e, 'projects')}>
+              <a ref={magPrimary} href="#projects" className="btn btn--primary" onClick={(e) => scrollTo(e, 'projects')}>
                 View My Work
               </a>
-              <a href="#contact" className="btn btn--outline" onClick={(e) => scrollTo(e, 'contact')}>
+              <a ref={magOutline} href="#contact" className="btn btn--outline" onClick={(e) => scrollTo(e, 'contact')}>
                 Say Hello
               </a>
             </div>
@@ -550,8 +555,16 @@ function CTAContact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
-    await new Promise((r) => setTimeout(r, 1800));
-    setStatus('success');
+    try {
+      const res = await fetch('https://formspree.io/f/xkoaylrq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+      });
+      setStatus(res.ok ? 'success' : 'error');
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
@@ -627,13 +640,15 @@ function CTAContact() {
                   </div>
                   <button
                     type="submit"
-                    className={`contact-submit${status !== 'idle' ? ` contact-submit--${status}` : ''}`}
-                    disabled={status !== 'idle'}
+                    className={`contact-submit${status !== 'idle' && status !== 'error' ? ` contact-submit--${status}` : ''}${status === 'error' ? ' contact-submit--error' : ''}`}
+                    disabled={status === 'loading' || status === 'success'}
+                    onClick={status === 'error' ? () => setStatus('idle') : undefined}
                   >
                     <span className="contact-submit-inner">
                       {status === 'idle' && <><IconSend size={15} /> Send Message</>}
                       {status === 'loading' && <><IconLoader2 size={15} className="spin-icon" /> Sending...</>}
                       {status === 'success' && <><IconCheck size={15} /> Message Sent!</>}
+                      {status === 'error' && <><IconAlertCircle size={15} /> Failed — click to retry</>}
                     </span>
                   </button>
                 </form>
@@ -656,13 +671,13 @@ function Footer() {
     <footer className="footer">
       <div className="container footer__inner">
         <p ref={leftRef} className="footer__copy reveal">
-          © 2025 Quan Huynh · Built with React + Vite
+          © 2026 Quan Huynh · CopyRight
         </p>
         <div ref={rightRef} className="footer__icons reveal delay-2">
-          <a href="https://github.com/quanhuynh" target="_blank" rel="noreferrer" className="footer__icon" aria-label="GitHub">
+          <a href="https://github.com/nhuynh30" target="_blank" rel="noreferrer" className="footer__icon" aria-label="GitHub">
             <IconBrandGithub size={17} />
           </a>
-          <a href="https://linkedin.com/in/quanhuynh" target="_blank" rel="noreferrer" className="footer__icon" aria-label="LinkedIn">
+          <a href="https://www.linkedin.com/in/quanhuynh364/" target="_blank" rel="noreferrer" className="footer__icon" aria-label="LinkedIn">
             <IconBrandLinkedin size={17} />
           </a>
           <a href="mailto:quanhuynh364@gmail.com" className="footer__icon" aria-label="Email">
