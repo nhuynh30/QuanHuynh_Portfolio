@@ -29,11 +29,13 @@ import { useCounter } from './hooks/useCounter';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import { useMagnetic } from './hooks/useMagnetic';
 import ScrollProgress from './components/ScrollProgress';
+import Experience from './components/Experience';
 
 // === DATA ===
 const navItems = [
   { label: 'Home', id: 'home' },
   { label: 'About', id: 'about' },
+  { label: 'Experience', id: 'experience' },
   { label: 'Skills', id: 'skills' },
   { label: 'Projects', id: 'projects' },
   { label: 'Contact', id: 'contact' },
@@ -704,6 +706,7 @@ export default function App() {
         <Hero />
         <Stats />
         <GMUSection />
+        <Experience />
         <Skills />
         <Projects />
         <CTAContact />
