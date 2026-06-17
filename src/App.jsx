@@ -21,6 +21,9 @@ import {
   IconLoader2,
   IconUser,
   IconAlertCircle,
+  IconActivity,
+  IconTrendingUp,
+  IconSchool,
 } from '@tabler/icons-react';
 import { useTheme } from './context/ThemeContext';
 import { useTilt } from './hooks/useTilt';
@@ -30,6 +33,7 @@ import { useScrollReveal } from './hooks/useScrollReveal';
 import { useMagnetic } from './hooks/useMagnetic';
 import ScrollProgress from './components/ScrollProgress';
 import Experience from './components/Experience';
+import About from './components/About';
 
 // === DATA ===
 const navItems = [
@@ -51,21 +55,25 @@ const skills = [
 const projects = [
   {
     tag: 'Full Stack',
-    title: 'StudyBuddy',
-    description: 'A collaborative study planner built with React and Firebase for campus students.',
-    Icon: IconUsers,
-    stack: ['React', 'Firebase', 'CSS'],
-    github: '#',
-    live: '#',
+    title: 'PaceTrack',
+    description: 'GPS running tracker with real-time club leaderboards, Socket.io sync, AWS S3 route uploads, and interactive Mapbox route playback.',
+    Icon: IconActivity,
+    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'Socket.io', 'AWS S3', 'Mapbox GL'],
+    github: 'https://github.com/nhuynh30/PaceTrack',
+    live: 'https://pace-track.vercel.app/',
+    dates: 'May 2025 – Present',
+    previewImg: '/assets/pacetrack-preview.png',
   },
   {
-    tag: 'Automation',
-    title: 'Course Data Scraper',
-    description: 'Python automation script that extracts university course details and builds study schedules.',
-    Icon: IconTerminal2,
-    stack: ['Python', 'BeautifulSoup', 'Pandas'],
-    github: '#',
-    live: null,
+    tag: 'AI + FinTech',
+    title: 'TradingLab',
+    description: 'AI-powered investment simulator with multi-asset DCA backtesting, OpenAI advisor streaming via SSE, and Redis-backed rate limiting.',
+    Icon: IconTrendingUp,
+    stack: ['React', 'TypeScript', 'NestJS', 'MongoDB', 'Redis', 'OpenAI', 'Docker'],
+    github: 'https://github.com/po-tech-community/trading-lab',
+    live: 'https://po-trading-lab.vercel.app/',
+    dates: 'Apr 2026 – Present',
+    previewImg: '/assets/tradinglab-preview.png',
   },
   {
     tag: 'Coming Soon',
@@ -173,7 +181,7 @@ function Navbar() {
               </div>
             </button>
           </div>
-          <a className="btn btn--cv" href="/cv.pdf" download>
+          <a className="btn btn--cv" href="/assets/Quan_Huynh_Resume.pdf" download="Quan_Huynh_Resume.pdf">
             <IconDownload size={15} />
             Download CV
           </a>
@@ -457,9 +465,16 @@ function FlipCard({ project }) {
       <div className="flip-inner">
         {/* FRONT */}
         <div className="flip-front">
-          <div className="project__preview">
+          <div className={`project__preview${project.previewImg ? ' has-img' : ''}`}>
+            {project.previewImg && (
+              <img
+                src={project.previewImg}
+                alt={`${project.title} preview`}
+                className="project__preview-img"
+              />
+            )}
             <div className="project__preview-icon">
-              <project.Icon size={28} />
+              <project.Icon size={project.previewImg ? 16 : 28} />
             </div>
           </div>
           <div className="project__body">
@@ -474,6 +489,7 @@ function FlipCard({ project }) {
         {!isComingSoon && (
           <div className="flip-back">
             <div className="flip-back-title">Tech Stack</div>
+            {project.dates && <p className="flip-back-dates">{project.dates}</p>}
             <div className="flip-stack-list">
               {project.stack.map((s) => (
                 <span key={s} className="stack-badge">{s}</span>
@@ -481,12 +497,12 @@ function FlipCard({ project }) {
             </div>
             <div className="flip-links">
               {project.github && (
-                <a href={project.github} className="flip-btn-github" onClick={(e) => e.stopPropagation()}>
+                <a href={project.github} className="flip-btn-github" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
                   <IconBrandGithub size={13} /> GitHub
                 </a>
               )}
               {project.live && (
-                <a href={project.live} className="flip-btn-live" onClick={(e) => e.stopPropagation()}>
+                <a href={project.live} className="flip-btn-live" target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()}>
                   <IconExternalLink size={13} /> Live Demo
                 </a>
               )}
@@ -691,6 +707,36 @@ function Footer() {
   );
 }
 
+// === EDU BRIDGE — scan-glow + power-on ===
+function EduBridge() {
+  const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add('bridge-poweron'); obs.disconnect(); } },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <>
+      <div className="scan-band"><div className="scan-beam" /></div>
+      <div className="section-bridge bridge--edu" ref={ref}>
+        <div className="bridge-line" />
+        <div className="bridge-pill">
+          <div className="bridge-icon"><IconSchool size={15} /></div>
+          <div className="bridge-dot" />
+          <span className="bridge-text">Education</span>
+          <div className="bridge-dot right" />
+        </div>
+        <div className="bridge-line right" />
+      </div>
+    </>
+  );
+}
+
 // === APP ===
 export default function App() {
   useScrollAnimation();
@@ -705,6 +751,18 @@ export default function App() {
       <main>
         <Hero />
         <Stats />
+        <div className="section-bridge bridge--entry">
+          <div className="bridge-line" />
+          <div className="bridge-pill">
+            <div className="bridge-icon"><IconUser size={15} /></div>
+            <div className="bridge-dot" />
+            <span className="bridge-text">About Me</span>
+            <div className="bridge-dot right" />
+          </div>
+          <div className="bridge-line right" />
+        </div>
+        <About />
+        <EduBridge />
         <GMUSection />
         <Experience />
         <Skills />
