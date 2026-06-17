@@ -34,6 +34,7 @@ import { useMagnetic } from './hooks/useMagnetic';
 import ScrollProgress from './components/ScrollProgress';
 import Experience from './components/Experience';
 import About from './components/About';
+import MinecraftScene from './components/MinecraftScene';
 
 // === DATA ===
 const navItems = [
@@ -407,7 +408,7 @@ function GMUSection() {
   );
 }
 
-// === SKILLS — tilt + stagger ===
+// === SKILLS — tilt + stagger + marquee ===
 function Skills() {
   const s0 = useTilt(7, 1.3);
   const s1 = useTilt(7, 1.3);
@@ -416,7 +417,64 @@ function Skills() {
   const tiltRefs = [s0, s1, s2, s3];
   const delayClasses = ['delay-1', 'delay-2', 'delay-3', 'delay-4'];
 
+  useEffect(() => {
+    const row1 = [
+      { n: 'Python',     u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',          c: 'blue' },
+      { n: 'Java',       u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',              c: 'orange' },
+      { n: 'C++',        u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',    c: 'blue' },
+      { n: 'C#',         u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',          c: 'purple' },
+      { n: 'TypeScript', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',  c: 'blue' },
+      { n: 'JavaScript', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',  c: 'yellow' },
+      { n: 'Go',         u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',                  c: 'cyan' },
+      { n: 'C',          u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',                    c: 'blue' },
+      { n: 'React',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',            c: 'cyan' },
+      { n: 'Next.js',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',          c: 'darkblue' },
+      { n: 'Node.js',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',          c: 'green' },
+      { n: 'Spring Boot',u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg',          c: 'green' },
+      { n: 'Flask',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg',            c: 'darkgray' },
+      { n: 'FastAPI',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg',        c: 'teal' },
+      { n: 'Tailwind',   u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',c: 'sky' },
+      { n: 'Redux',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg',            c: 'purple' },
+    ];
+    const row2 = [
+      { n: 'AWS',        u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg', c: 'orange' },
+      { n: 'Docker',     u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',          c: 'sky' },
+      { n: 'Kubernetes', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-original.svg',  c: 'darkblue' },
+      { n: 'PostgreSQL', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',  c: 'blue' },
+      { n: 'MongoDB',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',        c: 'green' },
+      { n: 'Redis',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',            c: 'red' },
+      { n: 'MySQL',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',            c: 'orange' },
+      { n: 'DynamoDB',   u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dynamodb/dynamodb-original.svg',      c: 'indigo' },
+      { n: 'PyTorch',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',        c: 'red' },
+      { n: 'TensorFlow', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',  c: 'orange' },
+      { n: 'NumPy',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg',            c: 'blue' },
+      { n: 'Terraform',  u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg',    c: 'indigo' },
+      { n: 'Linux',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',            c: 'lime' },
+      { n: 'Nginx',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg',            c: 'green' },
+      { n: 'GCP',        u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg',c: 'sky' },
+      { n: 'GitHub',     u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',          c: 'darkgray' },
+      { n: 'Bash',       u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg',              c: 'green' },
+    ];
+    const buildIcon = (s) => {
+      const div = document.createElement('div');
+      div.className = 'sk-icon-box';
+      div.title = s.n;
+      div.setAttribute('data-color', s.c);
+      div.innerHTML = `<img src="${s.u}" alt="${s.n}" loading="lazy" />`;
+      return div;
+    };
+    const populate = (id, items) => {
+      const track = document.getElementById(id);
+      if (!track) return;
+      track.innerHTML = '';
+      [...items, ...items].forEach(s => track.appendChild(buildIcon(s)));
+    };
+    populate('sk-r1', row1);
+    populate('sk-r2', row2);
+  }, []);
+
   return (
+    <>
     <section className="skills-section" id="skills" data-tilt-zone>
       <div className="container">
         <div className="animate-on-scroll">
@@ -443,7 +501,24 @@ function Skills() {
           ))}
         </div>
       </div>
+      <div className="skills-more-section">
+        <div className="skills-more-label">
+          <div className="skills-more-line" />
+          <span>and many more</span>
+          <div className="skills-more-line" />
+        </div>
+        <div className="marquee-wrapper">
+          <div className="marquee-row">
+            <div className="marquee-track" id="sk-r1" />
+          </div>
+          <div className="marquee-row">
+            <div className="marquee-track marquee-reverse" id="sk-r2" />
+          </div>
+        </div>
+      </div>
     </section>
+    <div className="skills-gradient-bridge" />
+    </>
   );
 }
 
@@ -749,6 +824,7 @@ export default function App() {
         <Projects />
         <CTAContact />
       </main>
+      <MinecraftScene />
       <Footer />
     </>
   );

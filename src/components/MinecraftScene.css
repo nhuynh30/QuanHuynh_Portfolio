@@ -1,0 +1,150 @@
+.mc-outer {
+  padding: 40px 64px 52px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+[data-theme="dark"] .mc-outer { background: #060d1a; }
+
+.mc-hd { text-align: center; margin-bottom: 20px; }
+.mc-ey {
+  font-size: 10px; letter-spacing: 2.5px; color: #16a34a;
+  text-transform: uppercase; font-weight: 600; margin-bottom: 6px;
+}
+.mc-tt {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700; color: #0f1f0f;
+}
+[data-theme="dark"] .mc-tt { color: #f0fff4; }
+.mc-tt span { color: #16a34a; }
+.mc-hint { font-size: 11px; color: #9ca3af; margin-top: 4px; }
+
+/* SCENE */
+.mc-scene {
+  border-radius: 20px; overflow: hidden;
+  position: relative; height: 320px;
+  transition: background 2.5s ease;
+  background: linear-gradient(to bottom, #78c8f0 0%, #a8d8f0 50%, #c0e8ff 100%);
+  cursor: default;
+}
+.mc-scene.night {
+  background: linear-gradient(to bottom, #020817 0%, #0a1628 40%, #0f2040 100%);
+}
+
+/* stars */
+.mc-stars {
+  position: absolute; inset: 0; pointer-events: none;
+  opacity: 0; transition: opacity 2.5s;
+}
+.mc-scene.night .mc-stars { opacity: 1; }
+.mc-star {
+  position: absolute; border-radius: 50%; background: #fff;
+  animation: mc-twinkle 2s ease-in-out infinite;
+}
+@keyframes mc-twinkle {
+  0%,100% { opacity: 0.15; } 50% { opacity: 1; }
+}
+
+/* sun */
+.mc-cel {
+  position: absolute; width: 44px; height: 44px;
+  border-radius: 50%; top: 16px;
+  transition: background 2.5s, box-shadow 2.5s;
+  background: #fbbf24;
+  box-shadow: 0 0 20px rgba(251,191,36,0.7), 0 0 50px rgba(251,191,36,0.3);
+}
+.mc-scene.night .mc-cel {
+  background: transparent; box-shadow: none;
+}
+
+/* moon */
+.mc-moon {
+  position: absolute; width: 44px; height: 44px;
+  top: 16px; opacity: 0; transition: opacity 2.5s;
+}
+.mc-scene.night .mc-moon { opacity: 1; }
+.mc-moon-shape {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: #e2e8f0;
+  box-shadow: 0 0 14px rgba(226,232,240,0.5);
+  position: relative; overflow: hidden;
+}
+.mc-moon-shape::after {
+  content: ''; position: absolute;
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #0a1628; top: -4px; left: 12px;
+}
+
+/* clouds */
+.mc-cloud {
+  position: absolute; border-radius: 20px;
+  background: rgba(255,255,255,0.9);
+  animation: mc-drift linear infinite;
+  transition: opacity 2.5s;
+}
+.mc-scene.night .mc-cloud { opacity: 0.04; }
+.mc-c1 { width: 90px; height: 24px; top: 38px; left: 160px; animation-duration: 22s; }
+.mc-c2 { width: 60px; height: 16px; top: 62px; left: 380px; animation-duration: 30s; animation-delay: -12s; }
+@keyframes mc-drift {
+  0% { transform: translateX(-120px); }
+  100% { transform: translateX(120%); }
+}
+
+/* night overlay */
+.mc-night-overlay {
+  position: absolute; inset: 0;
+  background: transparent; pointer-events: none;
+  transition: background 2.5s;
+}
+.mc-scene.night .mc-night-overlay { background: rgba(0,5,20,0.25); }
+
+/* ground */
+.mc-ground {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 64px; background: #16a34a; border-top: 5px solid #4ade80;
+}
+.mc-dirt {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 44px; background: #92400e;
+}
+
+/* pixel sprites */
+.mc-px {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
+/* zombies */
+.mc-zw {
+  position: absolute; bottom: 62px;
+  opacity: 0; transition: opacity 1.8s ease;
+  image-rendering: pixelated;
+}
+.mc-scene.night .mc-zw { opacity: 1; }
+
+.mc-zw1 { right: 60px; animation: mc-wl 8s linear infinite, mc-zb 0.5s ease-in-out infinite; }
+.mc-zw2 { right: 200px; animation: mc-wl 12s linear 2s infinite, mc-zb 0.5s ease-in-out infinite 0.25s; }
+.mc-zw3 { left: 0; animation: mc-wr 10s linear 1s infinite, mc-zb 0.5s ease-in-out infinite 0.15s; }
+
+@keyframes mc-wl { 0% { transform: translateX(0); } 100% { transform: translateX(-600px); } }
+@keyframes mc-wr { 0% { transform: translateX(0); } 100% { transform: translateX(600px); } }
+@keyframes mc-zb { 0%,100% { margin-bottom: 0; } 50% { margin-bottom: 2px; } }
+
+/* label */
+.mc-lbl {
+  position: absolute; bottom: 70px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; padding: 3px 10px; border-radius: 50px;
+  background: rgba(0,0,0,0.18); color: rgba(255,255,255,0.6);
+  white-space: nowrap; pointer-events: none;
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  .mc-outer { padding: 48px 20px 32px; margin-top: 24px; }
+  .mc-scene { height: 200px; transform: scale(0.88); transform-origin: top center; }
+  .mc-tt { font-size: 17px; }
+  .mc-hint { font-size: 10px; }
+}
