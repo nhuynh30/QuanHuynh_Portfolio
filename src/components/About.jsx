@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import {
   IconHandStop, IconMapPin, IconLanguage,
-  IconCoffee, IconHeart, IconSchool,
+  IconCoffee, IconHeart, IconSchool, IconUserCircle,
 } from '@tabler/icons-react';
 import './About.css';
 
@@ -32,13 +32,19 @@ export default function About() {
   };
 
   return (
-    <section className="about-section" id="about">
-      <div className="ab-aurora ab-a1" />
-      <div className="ab-aurora ab-a2" />
-      <div className="ab-dots" />
-      <div className="ab-bg-word">QH</div>
-
-      <div className="ab-inner">
+    <div className="about-rise-wrapper" id="about">
+      <div className="about-badge-row">
+        <div className="about-badge">
+          <div className="about-badge-icon">
+            <IconUserCircle size={14} />
+          </div>
+          <div className="about-badge-dot" />
+          <span className="about-badge-text">About me</span>
+          <div className="about-badge-dot" />
+        </div>
+      </div>
+      <div className="about-section">
+        <div className="ab-inner">
         <div className="ab-grid">
 
           {/* LEFT — photo stack */}
@@ -136,6 +142,7 @@ export default function About() {
 
         </div>
       </div>
-    </section>
+      </div>
+    </div>
   );
 }

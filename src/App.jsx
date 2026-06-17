@@ -359,7 +359,7 @@ function GMUSection() {
   const pillsRef = useScrollReveal();
 
   return (
-    <section className="gmu-section" id="about">
+    <section className="gmu-section">
       <div className="gmu-ghost" aria-hidden="true">MASON</div>
       <div className="container">
         <div className="gmu-row">
@@ -707,36 +707,6 @@ function Footer() {
   );
 }
 
-// === EDU BRIDGE — scan-glow + power-on ===
-function EduBridge() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { el.classList.add('bridge-poweron'); obs.disconnect(); } },
-      { threshold: 0.5 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return (
-    <>
-      <div className="scan-band"><div className="scan-beam" /></div>
-      <div className="section-bridge bridge--edu" ref={ref}>
-        <div className="bridge-line" />
-        <div className="bridge-pill">
-          <div className="bridge-icon"><IconSchool size={15} /></div>
-          <div className="bridge-dot" />
-          <span className="bridge-text">Education</span>
-          <div className="bridge-dot right" />
-        </div>
-        <div className="bridge-line right" />
-      </div>
-    </>
-  );
-}
-
 // === APP ===
 export default function App() {
   useScrollAnimation();
@@ -751,19 +721,24 @@ export default function App() {
       <main>
         <Hero />
         <Stats />
-        <div className="section-bridge bridge--entry">
-          <div className="bridge-line" />
-          <div className="bridge-pill">
-            <div className="bridge-icon"><IconUser size={15} /></div>
-            <div className="bridge-dot" />
-            <span className="bridge-text">About Me</span>
-            <div className="bridge-dot right" />
-          </div>
-          <div className="bridge-line right" />
-        </div>
         <About />
-        <EduBridge />
-        <GMUSection />
+        <div className="story-section">
+          <div className="story-aurora story-a1" />
+          <div className="story-aurora story-a2" />
+          <div className="story-dots" />
+          <div className="story-bg-word">QH</div>
+          <div className="section-bridge bridge--gmu">
+            <div className="bridge-line" />
+            <div className="bridge-pill">
+              <div className="bridge-icon"><IconSchool size={15} /></div>
+              <div className="bridge-dot" />
+              <span className="bridge-text">Where I study</span>
+              <div className="bridge-dot right" />
+            </div>
+            <div className="bridge-line right" />
+          </div>
+          <GMUSection />
+        </div>
         <Experience />
         <Skills />
         <Projects />
