@@ -239,7 +239,7 @@
   box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), 20px 20px 0 rgba(22, 163, 74, 0.08);
   overflow: hidden;
   left: 30px;
-  top: 0;
+
   z-index: 2;
   animation: ab-pm 4s ease-in-out infinite;
   background: rgba(255, 255, 255, 0.05);
@@ -679,31 +679,89 @@
     padding: 0 20px;
   }
 
+  .about-badge {
+    padding: 8px 14px;
+    gap: 8px;
+    margin: 0 12px;
+  }
+
+  .about-badge-text {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+
+  .about-badge-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .about-badge-dot {
+    width: 4px;
+    height: 4px;
+  }
+
   .about-section {
-    padding: 40px 20px 48px;
+    padding: 56px 20px 48px;
   }
 
   .ab-grid {
     grid-template-columns: 1fr;
-    gap: 80px;
+    gap: 40px;
   }
 
   .ab-photos-side {
-    height: 340px;
-  }
-
-  .ab-name-main {
-    font-size: 32px;
+    height: 320px;
+    display: flex;
+    justify-content: center;
   }
 
   .ab-p-main {
     width: 200px;
     height: 260px;
+    left: 20px;
   }
 
   .ab-p-second {
     width: 130px;
     height: 160px;
-    right: 0;
+    left: auto;
+    right: 20px;
+  }
+
+  .ab-name-main {
+    font-size: 28px;
+  }
+
+  .ab-eyebrow {
+    font-size: 9px;
+  }
+
+  .ab-journey {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+
+  .ab-jflag {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+
+  .ab-facts {
+    gap: 6px;
+  }
+
+  .ab-fact {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+
+  .ab-chip {
+    display: none;
+  }
+
+  .ab-flags-badge {
+    display: none;
   }
 }

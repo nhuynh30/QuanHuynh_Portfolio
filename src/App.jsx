@@ -298,7 +298,7 @@ function Hero() {
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <img src="/assets/quan.png" alt="Quan Huynh" className="hero__image" />
+                  <img src="/assets/quan.webp" alt="Quan Huynh" className="hero__image" />
                 </div>
               </div>
               <div className="hero__badge hero__badge--br">
@@ -320,7 +320,7 @@ function Stats() {
   const r2 = useTilt(6, 1.4);
   const r3 = useTilt(6, 1.4);
 
-  const { count: projects, ref: cr0 } = useCounter(3, 1200);
+  const { count: projects, ref: cr0 } = useCounter(2, 1200);
   const { count: years, ref: cr1 } = useCounter(2, 1000);
   const { count: grad, ref: cr2 } = useCounter(2028, 1800);
 
@@ -449,17 +449,21 @@ function Skills() {
 
 // === FLIP CARD component ===
 function FlipCard({ project }) {
-  const [flipped, setFlipped] = useState(false);
+  const cardRef = useRef(null);
   const isComingSoon = Boolean(project.comingSoon);
 
   const handleClick = () => {
     if (isComingSoon) return;
-    if (window.innerWidth < 768) setFlipped((f) => !f);
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+    if (isTouch && cardRef.current) {
+      cardRef.current.classList.toggle('flipped');
+    }
   };
 
   return (
     <div
-      className={`flip-card reveal${flipped ? ' flipped' : ''}${isComingSoon ? ' coming-soon-card' : ''}`}
+      ref={cardRef}
+      className={`flip-card reveal${isComingSoon ? ' coming-soon-card' : ''}`}
       onClick={handleClick}
     >
       <div className="flip-inner">
@@ -718,6 +722,7 @@ export default function App() {
       <div className="blob blob--tr" aria-hidden="true" />
       <div className="blob blob--bl" aria-hidden="true" />
       <Navbar />
+      <div className="mobile-hint" aria-hidden="true">For the best experience, view on desktop</div>
       <main>
         <Hero />
         <Stats />

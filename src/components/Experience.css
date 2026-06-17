@@ -299,7 +299,15 @@
 
 /* mobile */
 @media (max-width: 768px) {
-  .exp-section { padding: 36px 20px; margin: 3rem 16px 0; animation: none; }
+  .exp-section { padding: 36px 20px; margin: 3rem 16px 0; animation: none; border-radius: 20px; }
   .acc-right { display: none; }
   .acc-header { padding: 14px 16px; gap: 12px; }
+  .acc-role { font-size: 13px; }
+  .acc-company { font-size: 11px; }
+  .logo-box, .logo-wrap { width: 44px; height: 44px; }
+  .acc-body-inner { padding: 14px 16px 18px; }
+  .acc-desc { font-size: 12px; }
+  .acc-tags { gap: 4px; }
+  .acc-tag { font-size: 9px; padding: 3px 10px; }
+  .exp-title { font-size: 24px; }
 }
