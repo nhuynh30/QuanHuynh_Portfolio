@@ -24,6 +24,7 @@ import {
   IconActivity,
   IconTrendingUp,
   IconSchool,
+  IconBrandJavascript,
 } from '@tabler/icons-react';
 import { useTheme } from './context/ThemeContext';
 import { useTilt } from './hooks/useTilt';
@@ -47,10 +48,12 @@ const navItems = [
 ];
 
 const skills = [
-  { name: 'React', level: 'Intermediate', progress: 70, Icon: IconBrandReact },
-  { name: 'Python', level: 'Advanced', progress: 80, Icon: IconBrandPython },
-  { name: 'Java', level: 'Advanced', progress: 80, Icon: IconCoffee },
-  { name: 'Git', level: 'Intermediate', progress: 80, Icon: IconBrandGit },
+  { name: 'React', level: 'Intermediate', progress: 70, Icon: IconBrandReact, logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg' },
+  { name: 'JavaScript', level: 'Intermediate', progress: 70, Icon: IconBrandJavascript, logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+  { name: 'Python', level: 'Advanced', progress: 80, Icon: IconBrandPython, logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+  { name: 'Java', level: 'Advanced', progress: 80, Icon: IconCoffee, logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg' },
+  { name: 'C', level: 'Intermediate', progress: 70, Icon: IconTerminal2, logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg' },
+  { name: 'Git', level: 'Intermediate', progress: 80, Icon: IconBrandGit, logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
 ];
 
 const projects = [
@@ -157,7 +160,16 @@ function Navbar() {
   const scrollTo = (e, id) => {
     e.preventDefault();
     const el = document.getElementById(id);
-    if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+    if (!el) return;
+    if (id === 'contact') {
+      const rect = el.getBoundingClientRect();
+      const elCenter = window.scrollY + rect.top + rect.height / 2;
+      window.scrollTo({ top: elCenter - window.innerHeight / 2, behavior: 'smooth' });
+    } else if (id === 'about') {
+      window.scrollTo({ top: el.offsetTop - 110, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -385,7 +397,7 @@ function GMUSection() {
 
           {/* Right: text content */}
           <div>
-            <p ref={eyebrowRef} className="gmu-eyebrow reveal">WHERE I STUDY</p>
+            <p ref={eyebrowRef} className="gmu-eyebrow reveal">About my School</p>
             <div className="gmu-divider reveal delay-1" ref={useScrollReveal()} />
             <h2 ref={headingRef} className="gmu-heading reveal delay-2">
               George Mason<br />
@@ -414,46 +426,48 @@ function Skills() {
   const s1 = useTilt(7, 1.3);
   const s2 = useTilt(7, 1.3);
   const s3 = useTilt(7, 1.3);
-  const tiltRefs = [s0, s1, s2, s3];
-  const delayClasses = ['delay-1', 'delay-2', 'delay-3', 'delay-4'];
+  const s4 = useTilt(7, 1.3);
+  const s5 = useTilt(7, 1.3);
+  const tiltRefs = [s0, s1, s2, s3, s4, s5];
+  const delayClasses = ['delay-1', 'delay-2', 'delay-3', 'delay-4', 'delay-5', 'delay-6'];
 
   useEffect(() => {
     const row1 = [
-      { n: 'Python',     u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',          c: 'blue' },
-      { n: 'Java',       u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',              c: 'orange' },
-      { n: 'C++',        u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',    c: 'blue' },
-      { n: 'C#',         u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg',          c: 'purple' },
-      { n: 'TypeScript', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',  c: 'blue' },
-      { n: 'JavaScript', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',  c: 'yellow' },
-      { n: 'Go',         u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',                  c: 'cyan' },
-      { n: 'C',          u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg',                    c: 'blue' },
-      { n: 'React',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',            c: 'cyan' },
-      { n: 'Next.js',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',          c: 'darkblue' },
-      { n: 'Node.js',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',          c: 'green' },
-      { n: 'Spring Boot',u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg',          c: 'green' },
-      { n: 'Flask',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg',            c: 'darkgray' },
-      { n: 'FastAPI',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg',        c: 'teal' },
-      { n: 'Tailwind',   u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',c: 'sky' },
-      { n: 'Redux',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg',            c: 'purple' },
+      { n: 'Python', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', c: 'blue' },
+      { n: 'Java', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg', c: 'orange' },
+      { n: 'C++', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg', c: 'blue' },
+      { n: 'C#', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg', c: 'purple' },
+      { n: 'TypeScript', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', c: 'blue' },
+      { n: 'JavaScript', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', c: 'yellow' },
+      { n: 'Go', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg', c: 'cyan' },
+      { n: 'C', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg', c: 'blue' },
+      { n: 'React', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', c: 'cyan' },
+      { n: 'Next.js', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg', c: 'darkblue' },
+      { n: 'Node.js', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', c: 'green' },
+      { n: 'Spring Boot', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg', c: 'green' },
+      { n: 'Flask', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flask/flask-original.svg', c: 'darkgray' },
+      { n: 'FastAPI', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg', c: 'teal' },
+      { n: 'Tailwind', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg', c: 'sky' },
+      { n: 'Redux', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redux/redux-original.svg', c: 'purple' },
     ];
     const row2 = [
-      { n: 'AWS',        u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg', c: 'orange' },
-      { n: 'Docker',     u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',          c: 'sky' },
-      { n: 'Kubernetes', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-original.svg',  c: 'darkblue' },
-      { n: 'PostgreSQL', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',  c: 'blue' },
-      { n: 'MongoDB',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',        c: 'green' },
-      { n: 'Redis',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',            c: 'red' },
-      { n: 'MySQL',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',            c: 'orange' },
-      { n: 'DynamoDB',   u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dynamodb/dynamodb-original.svg',      c: 'indigo' },
-      { n: 'PyTorch',    u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',        c: 'red' },
-      { n: 'TensorFlow', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',  c: 'orange' },
-      { n: 'NumPy',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg',            c: 'blue' },
-      { n: 'Terraform',  u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg',    c: 'indigo' },
-      { n: 'Linux',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',            c: 'lime' },
-      { n: 'Nginx',      u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg',            c: 'green' },
-      { n: 'GCP',        u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg',c: 'sky' },
-      { n: 'GitHub',     u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',          c: 'darkgray' },
-      { n: 'Bash',       u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg',              c: 'green' },
+      { n: 'AWS', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg', c: 'orange' },
+      { n: 'Docker', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg', c: 'sky' },
+      { n: 'Kubernetes', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-original.svg', c: 'darkblue' },
+      { n: 'PostgreSQL', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', c: 'blue' },
+      { n: 'MongoDB', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', c: 'green' },
+      { n: 'Redis', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg', c: 'red' },
+      { n: 'MySQL', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg', c: 'orange' },
+      { n: 'DynamoDB', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dynamodb/dynamodb-original.svg', c: 'indigo' },
+      { n: 'PyTorch', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg', c: 'red' },
+      { n: 'TensorFlow', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg', c: 'orange' },
+      { n: 'NumPy', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg', c: 'blue' },
+      { n: 'Terraform', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/terraform/terraform-original.svg', c: 'indigo' },
+      { n: 'Linux', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg', c: 'lime' },
+      { n: 'Nginx', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg', c: 'green' },
+      { n: 'GCP', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecloud/googlecloud-original.svg', c: 'sky' },
+      { n: 'GitHub', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg', c: 'darkgray' },
+      { n: 'Bash', u: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg', c: 'green' },
     ];
     const buildIcon = (s) => {
       const div = document.createElement('div');
@@ -475,49 +489,50 @@ function Skills() {
 
   return (
     <>
-    <section className="skills-section" id="skills" data-tilt-zone>
-      <div className="container">
-        <div className="animate-on-scroll">
-          <p className="section-eyebrow">WHAT I KNOW</p>
-          <h2 className="section-title">My <span className="accent">skills</span></h2>
+      <section className="skills-section" id="skills" data-tilt-zone>
+        <div className="container">
+          <div className="animate-on-scroll">
+            <p className="section-eyebrow">WHAT I KNOW</p>
+            <h2 className="section-title">My <span className="accent">skills</span></h2>
+          </div>
+          <div className="skills__grid">
+            {skills.map((skill, i) => (
+              <div
+                className={`skill-card animate-on-scroll ${delayClasses[i]}`}
+                key={i}
+                ref={tiltRefs[i]}
+                style={{ '--progress': `${skill.progress}%` }}
+              >
+                <div className="skill-icon">
+                  <skill.Icon size={24} className="skill-icon-tabler" />
+                  <img src={skill.logo} alt={skill.name} className="skill-icon-logo" loading="lazy" />
+                </div>
+                <p className="skill-name">{skill.name}</p>
+                <p className="skill-level">{skill.level}</p>
+                <div className="skill-progress">
+                  <div className="skill-bar" />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="skills__grid">
-          {skills.map((skill, i) => (
-            <div
-              className={`skill-card animate-on-scroll ${delayClasses[i]}`}
-              key={i}
-              ref={tiltRefs[i]}
-              style={{ '--progress': `${skill.progress}%` }}
-            >
-              <div className="skill-icon">
-                <skill.Icon size={24} />
-              </div>
-              <p className="skill-name">{skill.name}</p>
-              <p className="skill-level">{skill.level}</p>
-              <div className="skill-progress">
-                <div className="skill-bar" />
-              </div>
+        <div className="skills-more-section">
+          <div className="skills-more-label">
+            <div className="skills-more-line" />
+            <span>and many more</span>
+            <div className="skills-more-line" />
+          </div>
+          <div className="marquee-wrapper">
+            <div className="marquee-row">
+              <div className="marquee-track" id="sk-r1" />
             </div>
-          ))}
-        </div>
-      </div>
-      <div className="skills-more-section">
-        <div className="skills-more-label">
-          <div className="skills-more-line" />
-          <span>and many more</span>
-          <div className="skills-more-line" />
-        </div>
-        <div className="marquee-wrapper">
-          <div className="marquee-row">
-            <div className="marquee-track" id="sk-r1" />
-          </div>
-          <div className="marquee-row">
-            <div className="marquee-track marquee-reverse" id="sk-r2" />
+            <div className="marquee-row">
+              <div className="marquee-track marquee-reverse" id="sk-r2" />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-    <div className="skills-gradient-bridge" />
+      </section>
+      <div className="skills-gradient-bridge" />
     </>
   );
 }

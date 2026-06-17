@@ -17,6 +17,7 @@ export default function MinecraftScene() {
     moveCelestial();
     buildTree();
     buildSteve();
+    buildSword();
     buildZombies();
   }, []);
 
@@ -41,7 +42,9 @@ export default function MinecraftScene() {
         <div className="mc-night-overlay" />
 
         <div className="mc-px" id="mc-tree" style={{bottom:'62px', left:'50px'}} />
-        <div className="mc-px" id="mc-steve" style={{bottom:'62px', left:'210px'}} />
+        <div className="mc-px" id="mc-steve" style={{bottom:'62px', left:'210px'}}>
+          <div className="mc-sword" id="mc-sword" />
+        </div>
 
         <div className="mc-zw mc-zw1" id="mc-z1" />
         <div className="mc-zw mc-zw2" id="mc-z2" />
@@ -124,7 +127,7 @@ function buildTree() {
 
 function buildSteve() {
   const el = document.getElementById('mc-steve');
-  if (!el || el.children.length > 0) return;
+  if (!el || el.querySelector('[style*="grid"]')) return;
   const sP = {
     K:'#704214', k:'#8b5a2b',
     S:'#c8a076', s:'#b08060',
@@ -180,4 +183,25 @@ function buildZombies() {
     if (!el || el.children.length > 0) return;
     el.appendChild(makeSprite(px, zP, 6));
   });
+}
+
+function buildSword() {
+  const el = document.getElementById('mc-sword');
+  if (!el || el.children.length > 0) return;
+  const c = {
+    D:'#5cf0ee', d:'#3db8b6', k:'#2a8a88',
+    B:'#c8a040', b:'#8b6914', h:'#6b4f10',
+  };
+  const px = [
+    [0,0,0,0,0,0,'D'],
+    [0,0,0,0,0,'D','d'],
+    [0,0,0,0,'D','d','k'],
+    [0,0,0,'D','d','k',0],
+    [0,0,'D','d','k',0,0],
+    [0,'B','d','k',0,0,0],
+    ['b','B','B',0,0,0,0],
+    [0,'h',0,0,0,0,0],
+    [0,0,'h',0,0,0,0],
+  ];
+  el.appendChild(makeSprite(px, c, 3));
 }
