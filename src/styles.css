@@ -1364,6 +1364,9 @@ img {
   gap: 12px;
   width: max-content;
   animation: sk-scroll-left 28s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .marquee-track.marquee-reverse {
@@ -1406,9 +1409,7 @@ img {
   cursor: default;
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 1);
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
@@ -1749,7 +1750,7 @@ img {
 
 /* === CTA === */
 .cta-section {
-  padding: 0 2rem 5.5rem;
+  padding: 0 2rem 2rem;
   position: relative;
   z-index: 1;
   background: var(--bg);
@@ -2039,6 +2040,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 0;
+  position: relative;
 }
 
 /* Floating label fields */
@@ -2210,6 +2212,30 @@ img {
 .contact-submit--error {
   background: #dc2626;
   cursor: pointer;
+}
+
+.contact-toast {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: toast-in-out 5.7s ease forwards;
+  z-index: 10;
+}
+
+@keyframes toast-in-out {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  10%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-6px); }
 }
 
 @keyframes success-pop {

@@ -238,7 +238,14 @@ function Hero() {
   const scrollTo = (e, id) => {
     e.preventDefault();
     const el = document.getElementById(id);
-    if (el) window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+    if (!el) return;
+    if (id === 'contact') {
+      const rect = el.getBoundingClientRect();
+      const elCenter = window.scrollY + rect.top + rect.height / 2;
+      window.scrollTo({ top: elCenter - window.innerHeight / 2, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -634,6 +641,7 @@ function CTAContact() {
   const [flipped, setFlipped] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('idle');
+  const [toast, setToast] = useState(false);
   const wrapRef = useRef(null);
   const frontRef = useRef(null);
   const backRef = useRef(null);
@@ -666,6 +674,13 @@ function CTAContact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const sends = parseInt(localStorage.getItem('cf_sends') || '0', 10);
+    if (sends >= 3) {
+      setStatus('ratelimited');
+      setToast(true);
+      setTimeout(() => setToast(false), 5700);
+      return;
+    }
     setStatus('loading');
     try {
       const res = await fetch('https://formspree.io/f/xkoaylrq', {
@@ -673,7 +688,12 @@ function CTAContact() {
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ name: form.name, email: form.email, message: form.message }),
       });
-      setStatus(res.ok ? 'success' : 'error');
+      if (res.ok) {
+        localStorage.setItem('cf_sends', String(sends + 1));
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
     } catch {
       setStatus('error');
     }
@@ -752,8 +772,8 @@ function CTAContact() {
                   </div>
                   <button
                     type="submit"
-                    className={`contact-submit${status !== 'idle' && status !== 'error' ? ` contact-submit--${status}` : ''}${status === 'error' ? ' contact-submit--error' : ''}`}
-                    disabled={status === 'loading' || status === 'success'}
+                    className={`contact-submit${status !== 'idle' && status !== 'error' && status !== 'ratelimited' ? ` contact-submit--${status}` : ''}${status === 'error' || status === 'ratelimited' ? ' contact-submit--error' : ''}`}
+                    disabled={status === 'loading' || status === 'success' || status === 'ratelimited'}
                     onClick={status === 'error' ? () => setStatus('idle') : undefined}
                   >
                     <span className="contact-submit-inner">
@@ -761,8 +781,10 @@ function CTAContact() {
                       {status === 'loading' && <><IconLoader2 size={15} className="spin-icon" /> Sending...</>}
                       {status === 'success' && <><IconCheck size={15} /> Message Sent!</>}
                       {status === 'error' && <><IconAlertCircle size={15} /> Failed — click to retry</>}
+                      {status === 'ratelimited' && <><IconAlertCircle size={15} /> Limit reached — cannot send</>}
                     </span>
                   </button>
+                  {toast && <div className="contact-toast">You can only send 3 messages. Limit reached.</div>}
                 </form>
               </div>
             </div>
