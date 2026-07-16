@@ -25,6 +25,7 @@ import {
   IconTrendingUp,
   IconSchool,
   IconBrandJavascript,
+  IconShoppingCart,
 } from '@tabler/icons-react';
 import { useTheme } from './context/ThemeContext';
 import { useTilt } from './hooks/useTilt';
@@ -78,6 +79,17 @@ const projects = [
     live: 'https://po-trading-lab.vercel.app/',
     dates: 'Apr 2026 – Present',
     previewImg: '/assets/tradinglab-preview.png',
+  },
+  {
+    tag: 'Full Stack',
+    title: 'OpenCart',
+    description: 'Full-stack multi-vendor marketplace with Stripe Connect payment splitting, real-time chat via polling, Redis caching, and AWS S3 product image storage.',
+    Icon: IconShoppingCart,
+    stack: ['Next.js', 'PostgreSQL', 'Prisma', 'Redis', 'Stripe Connect', 'NextAuth', 'AWS S3'],
+    github: 'https://github.com/nhuynh30/OpenCart',
+    live: 'https://open-cart-fawn.vercel.app/',
+    dates: 'Jul 2026 – Present',
+    previewImg: '/assets/opencart.png',
   },
   {
     tag: 'Coming Soon',
@@ -566,18 +578,27 @@ function FlipCard({ project }) {
       <div className="flip-inner">
         {/* FRONT */}
         <div className="flip-front">
-          <div className={`project__preview${project.previewImg ? ' has-img' : ''}`}>
-            {project.previewImg && (
-              <img
-                src={project.previewImg}
-                alt={`${project.title} preview`}
-                className="project__preview-img"
-              />
-            )}
-            <div className="project__preview-icon">
-              <project.Icon size={project.previewImg ? 16 : 28} />
+          {isComingSoon ? (
+            <div className="coming-soon-orbit">
+              <div className="coming-soon-orbit__icon">
+                <project.Icon size={24} />
+              </div>
+              <div className="coming-soon-orbit__dot"></div>
             </div>
-          </div>
+          ) : (
+            <div className={`project__preview${project.previewImg ? ' has-img' : ''}`}>
+              {project.previewImg && (
+                <img
+                  src={project.previewImg}
+                  alt={`${project.title} preview`}
+                  className="project__preview-img"
+                />
+              )}
+              <div className="project__preview-icon">
+                <project.Icon size={project.previewImg ? 16 : 28} />
+              </div>
+            </div>
+          )}
           <div className="project__body">
             <span className="project__tag">{project.tag}</span>
             <h3 className="project__title">{project.title}</h3>

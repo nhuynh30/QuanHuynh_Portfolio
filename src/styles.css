@@ -2836,15 +2836,12 @@ img {
 
 .coming-soon-card {
   cursor: default;
+  grid-column: 1 / -1;
+  height: auto;
 }
 
-.coming-soon-card .flip-front {
-  border-style: dashed;
-  background: repeating-linear-gradient(-45deg,
-      transparent,
-      transparent 8px,
-      rgba(var(--accent-rgb), 0.03) 8px,
-      rgba(var(--accent-rgb), 0.03) 16px), var(--surface);
+.coming-soon-card .flip-back {
+  display: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2853,20 +2850,93 @@ img {
   }
 }
 
-.coming-soon-card .project__preview-icon {
-  animation: float-icon 3s ease-in-out infinite;
+.coming-soon-card .flip-front {
+  position: static;
+  height: auto;
+  background: #0d1f12;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3.5rem 2rem;
+  transition: background 0.45s ease, border-color 0.45s ease;
 }
 
-@keyframes float-icon {
+[data-theme="dark"] .coming-soon-card .flip-front {
+  background: #04080f;
+  border-color: rgba(255, 255, 255, 0.06);
+}
 
-  0%,
-  100% {
-    transform: translateY(0);
+.coming-soon-card .project__preview {
+  display: none;
+}
+
+.coming-soon-orbit {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1.25rem;
+}
+
+.coming-soon-orbit__icon {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(var(--accent-rgb), 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-bright);
+  transition: background 0.45s ease, color 0.45s ease;
+}
+
+.coming-soon-orbit__dot {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-bright);
+  box-shadow: 0 0 8px rgba(var(--accent-rgb), 0.5);
+  top: 50%;
+  left: 50%;
+  animation: orbit-spin 3s linear infinite;
+  transition: background 0.45s ease, box-shadow 0.45s ease;
+}
+
+@keyframes orbit-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(28px) rotate(0deg);
   }
 
-  50% {
-    transform: translateY(-8px);
+  to {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(28px) rotate(-360deg);
   }
+}
+
+.coming-soon-card .project__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+}
+
+.coming-soon-card .project__tag {
+  margin-bottom: 1rem;
+  background: rgba(var(--accent-rgb), 0.15);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  color: var(--accent-bright);
+}
+
+.coming-soon-card .project__title {
+  color: white;
+}
+
+.coming-soon-card .project__desc {
+  margin-bottom: 0;
+  max-width: 420px;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 /* Touch devices: fade instead of 3D flip (avoids mobile rendering bugs) */
