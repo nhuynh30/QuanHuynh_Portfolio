@@ -352,7 +352,7 @@ function Stats() {
   const r2 = useTilt(6, 1.4);
   const r3 = useTilt(6, 1.4);
 
-  const { count: projects, ref: cr0 } = useCounter(2, 1200);
+  const { count: projects, ref: cr0 } = useCounter(3, 1200);
   const { count: years, ref: cr1 } = useCounter(2, 1000);
   const { count: grad, ref: cr2 } = useCounter(2028, 1800);
 
