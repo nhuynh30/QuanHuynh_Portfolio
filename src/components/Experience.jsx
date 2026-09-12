@@ -8,7 +8,7 @@ const jobs = [
     role: 'AI Software Developer',
     company: 'Deepiri',
     type: 'Part-time',
-    dates: 'May 2026 – Present · 2 mos',
+    dates: 'May 2026 – Present · 4 mos',
     location: 'United States · Remote',
     desc: 'Built AI-assisted video editing workflows using Tauri, Rust, TypeScript, and FastAPI. Implemented AI job orchestration with Server-Sent Events (SSE), reducing job refresh latency by 60%. Developed video preview with a custom Rust timeline engine and FFmpeg proxy extraction, cutting p95 preview startup to under 500ms.',
     tags: ['Rust', 'TypeScript', 'FastAPI', 'Tauri', 'SSE', 'FFmpeg', 'Docker', 'AI/ML'],
