@@ -168,6 +168,7 @@
 .logo-gc .logo-card { background: linear-gradient(145deg, rgba(244,114,182,0.25), rgba(180,50,120,0.15)); color: #f472b6; }
 .logo-on .logo-card { background: linear-gradient(145deg, rgba(96,165,250,0.25), rgba(40,80,200,0.15)); color: #60a5fa; }
 .logo-dp .logo-card { background: linear-gradient(145deg, rgba(163,230,53,0.25), rgba(80,140,20,0.15)); color: #a3e635; }
+.logo-gm .logo-card { background: linear-gradient(145deg, rgba(52,211,153,0.2), rgba(0,122,61,0.13)); color: #34d399; }
 
 /* floating colored shadow beneath */
 .logo-shadow {
@@ -183,6 +184,7 @@
 .logo-gc-item .logo-shadow { background: rgba(244,114,182,0.4); }
 .logo-on-item .logo-shadow { background: rgba(96,165,250,0.4); }
 .logo-dp-item .logo-shadow { background: rgba(163,230,53,0.4); }
+.logo-gm-item .logo-shadow { background: rgba(52,211,153,0.32); }
 
 /* hover — pops out of screen */
 .logo-box:hover { transform: translateY(-6px) scale(1.08) rotateX(8deg); }
